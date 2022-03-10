@@ -287,6 +287,3 @@ function randomPlacement(arrayOfShips,Matrix){
         creatingShip(decks,randomNumber(9),randomNumber(9),direction,Matrix,arrayOfShips);
     }
 }
-function sayHi(){
-
-}
