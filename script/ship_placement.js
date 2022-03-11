@@ -1,5 +1,6 @@
 let theMatrix = [];
 let theMatrixOfHim = [];
+export {theMatrix, theMatrixOfHim}
 let field = document.querySelector(`.field`);
 creatingCell(field);
 creatingMatrix(theMatrix);
