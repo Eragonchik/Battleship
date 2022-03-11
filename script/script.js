@@ -1,6 +1,5 @@
 let theMatrix = [];
 let theMatrixOfHim = [];
-export {theMatrix, theMatrixOfHim}
 let field = document.querySelector(`.field`);
 creatingCell(field);
 creatingMatrix(theMatrix);
@@ -16,6 +15,18 @@ let arrOfNumbers = document.querySelectorAll(`h3`);
 addOnmousedownOnObjs(shipsObjs,onMouseDownOnShips);
 addOnmousedownOnObjs(cells,onMouseDownOnCells);
 placementOfShips.oncontextmenu = NoRight;
+
+
+
+
+
+
+
+
+
+
+
+
 function NoRight(){
 	return false;
 }
@@ -245,9 +256,22 @@ function creatingMatrix(variable){
 }
 function isEveryShipIsPlaced(){
     for (let i=0; i < document.querySelectorAll(`h3`).length; i++){
-        if (document.querySelectorAll(`h3`)[i].innerText != 0) return console.log(false)
+        if (document.querySelectorAll(`h3`)[i].innerText != 0) return false
     }
-    return console.log(true)
+    return true
+}
+function buttonContinue(){
+    if (isEveryShipIsPlaced()) {displayNone(`placement_of_ships`);displayFlex(`choose_difficult`);return}
+    else alert(`Position all ships`)
+}
+function displayNone(obj){
+    document.querySelector(`.${obj}`).style.display = `none`;
+}
+function displayBlock(obj){
+    document.querySelector(`.${obj}`).style.display = `block`;
+}
+function displayFlex(obj){
+    document.querySelector(`.${obj}`).style.display = `flex`;
 }
 function randomNumber(max){
     min = 0;

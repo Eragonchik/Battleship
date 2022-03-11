@@ -3,6 +3,9 @@
     margin: 0;
     font-family: sans-serif,cursive;
 }
+.load{
+    display: none;
+}
 .wrapper_placement_of_ships{
     width: 100vw;
     height: 100vh;
@@ -135,4 +138,29 @@
     .wrapper_placement_of_ships{
         flex-direction: column;
     }
+}
+
+.choose_difficult{
+    display: none;
+    width: 100vw;
+    height: 100vh;
+    background-color: aqua;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-content: center;
+    align-items: center;
+    background-image: url(../img/battleship1.jpeg);
+    overflow: hidden;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.difficults{
+    text-decoration: none;
+    font-size: 25px;
+    color: antiquewhite;
+    background-color: midnightblue;
+    opacity: 0.9;
+    padding: 30px 20%;
+    border-radius: 50px;
 }

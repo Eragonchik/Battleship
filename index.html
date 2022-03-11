@@ -9,6 +9,9 @@
 </head>
 <body>
     <div class="wrapper">
+        <div class="load">
+
+        </div>
         <div class="placement_of_ships">
             <div class="wrapper_placement_of_ships">
                 <div class="field">
@@ -32,18 +35,26 @@
                         <h3 class="number_of_one_deck">4</h3> 
                         </div>
                         <div class="wrapper_ships">
-                            <div class="ship one_deck_roll"></div>
+                            <div class="ship one_deck one_deck_roll"></div>
                             <div class="ship two_deck two_deck_roll"></div>
                             <div class="ship three_deck three_deck_roll"></div>
                             <div class="ship four_deck four_deck_roll"></div>
                         </div>
                     </div>
                     <a id="Random" href="javascript:randomPlacement(shipsOfMe,theMatrix);">Random</a>
-                    <a id="Continue" href="javascript:isEveryShipIsPlaced();">Continue</a>
+                    <a id="Continue" href="javascript:buttonContinue();">Continue</a>
                 </div>
             </div>
         </div>
+        <div class="choose_difficult">
+            <a class="difficults" id="Easy" href="javascript:alert(`Easy`);">Easy</a>
+            <a class="difficults" id="Medium" href="javascript:alert(`Medium`);">Medium</a>
+            <a class="difficults" id="Hard" href="javascript:alert(`Hard`);">Hard</a>
+        </div>
+        <div class="gameplay">
+
+        </div>
     </div>
-    <script type="module" src="script/script.js"></script>
+    <script src="script/script.js"></script>
 </body>
 </html>
