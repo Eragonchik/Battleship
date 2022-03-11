@@ -141,11 +141,11 @@
 }
 
 .choose_difficult{
-    display: none;
     width: 100vw;
     height: 100vh;
     background-color: aqua;
     display: flex;
+    display: none;
     flex-direction: column;
     justify-content: space-evenly;
     align-content: center;
@@ -164,3 +164,12 @@
     padding: 30px 20%;
     border-radius: 50px;
 }
+.demage{
+    background-image: linear-gradient(to bottom right, transparent 46%, red, transparent 55%), linear-gradient(to bottom left, transparent 46%, red, transparent 55%);
+    background-repeat: no-repeat;
+    font-size: 50px;
+    text-align: center;
+  }
+  .miss{
+    background: radial-gradient(15px, #000, rgba(255, 255, 255, .0));
+  }
