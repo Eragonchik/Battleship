@@ -41,7 +41,7 @@ function addOnmousedownOnObjs(objs,func){
 function onMouseDownOnCells(event){
     let eventTar = event.target;
     if (!eventTar.style.backgroundColor) return
-    let movedShip = searchShip(+eventTar.getAttribute(`x`),+eventTar.getAttribute(`y`));
+    let movedShip = searchShip(+eventTar.getAttribute(`x`),+eventTar.getAttribute(`y`),shipsOfMe);
     let movedObj = document.querySelector(`.ship.${movedShip.className()}`);
     if (!movedShip.direction) movedObj = document.querySelector(`.ship.${movedShip.className()}.${movedShip.className()}_roll`);
     onMouseDownOnShips(event,movedObj,true);
@@ -59,9 +59,10 @@ function deleteShipFromTheArray(ship,array){
     }
     shipsOfMe = arrChanged;
 }
-function searchShip(x,y){
-    for (let item of shipsOfMe){
-        if (item.x0()<=x && item.y0()<=y && item.x2()>=x && item.y2()>=y) return item
+function searchShip(x,y,ships){
+    for (let item of ships){
+        if(item.direction) if ((y == item.y1) && (x >= item.x1) && (x <= item.x1 + item.numberOfdeck - 1)) return item
+        if(!item.direction) if ((x == item.x1) && (y >= item.y1) && (y <= item.y1 + item.numberOfdeck - 1)) return item
     }
 }
 function reloadShips(){

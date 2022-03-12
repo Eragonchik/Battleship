@@ -164,6 +164,9 @@
     padding: 30px 20%;
     border-radius: 50px;
 }
+.difficults:hover{
+    transform: scale(1.1);
+}
 .demage{
     background-image: linear-gradient(to bottom right, transparent 46%, red, transparent 55%), linear-gradient(to bottom left, transparent 46%, red, transparent 55%);
     background-repeat: no-repeat;
