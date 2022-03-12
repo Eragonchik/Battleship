@@ -369,6 +369,7 @@ if (isMiss()) {div.classList.add(`.miss`);return myTurn}
 }
 
 function myTurn(){
+    addOnmousedownOnObjs();
 
 }
 function isMiss(x,y,ships){
