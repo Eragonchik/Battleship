@@ -47,12 +47,18 @@
             </div>
         </div>
         <div class="choose_difficult">
-            <a class="difficults" id="Easy" href="javascript:alert(`Easy`);">Easy</a>
-            <a class="difficults" id="Medium" href="javascript:alert(`Medium`);">Medium</a>
-            <a class="difficults" id="Hard" href="javascript:alert(`Hard`);">Hard</a>
+            <a class="difficults" id="Easy" href="javascript:difficult = easy;gameBegin(difficult);">Easy</a>
+            <a class="difficults" id="Medium" href="javascript:difficult = `medium`;gameBegin(difficult);">Medium</a>
+            <a class="difficults" id="Hard" href="javascript:difficult = `hard`;gameBegin(difficult);">Hard</a>
         </div>
         <div class="gameplay">
-
+            <div class="status">
+                <h2>Opponent's move</h2>
+            </div>
+            <div class="fields">
+                <div class="field ofMe"></div>
+                <div class="field OfHim"></div>
+            </div>
         </div>
     </div>
     <script src="script/script.js"></script>

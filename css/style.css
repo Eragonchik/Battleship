@@ -138,12 +138,15 @@
     .wrapper_placement_of_ships{
         flex-direction: column;
     }
+    .fields{
+        display: flex;
+        flex-direction: column;
+    }
 }
 
 .choose_difficult{
     width: 100vw;
     height: 100vh;
-    background-color: aqua;
     display: flex;
     display: none;
     flex-direction: column;
@@ -173,6 +176,33 @@
     font-size: 50px;
     text-align: center;
   }
-  .miss{
+.miss{
     background: radial-gradient(15px, #000, rgba(255, 255, 255, .0));
-  }
+}
+.gameplay{
+    width: 100vw;
+    height: 100vh;
+    display: none;
+    flex-direction: column;
+    background-image: url(../img/burning_sea.jpg);
+    background-repeat: round;
+    position: relative;
+    justify-content: center;
+}
+.fields{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.status{
+    position: absolute;
+    top: 11%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #eeeeee0f;
+    border-radius: 15px;
+    color: greenyellow;
+    padding: 15px;
+    font-size: 15px;
+    white-space: nowrap;
+}

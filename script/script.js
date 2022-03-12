@@ -1,7 +1,12 @@
 let theMatrix = [];
+let difficult = 0;
 let theMatrixOfHim = [];
 let field = document.querySelector(`.field`);
+let fields = document.querySelectorAll(`.field`);
+let whichOne = ``;
 creatingCell(field);
+creatingCell(fields[1]);
+creatingCell(fields[2]);
 creatingMatrix(theMatrix);
 creatingMatrix(theMatrixOfHim);
 let shipsObjs = document.querySelectorAll(`.ship`);
@@ -12,6 +17,8 @@ let shipsOfMe = [];
 let shipsOfHim = [];
 let index = 0;
 let arrOfNumbers = document.querySelectorAll(`h3`);
+let opponentMove = `Opponent's move`;
+let yourMove = `Your move`;
 addOnmousedownOnObjs(shipsObjs,onMouseDownOnShips);
 addOnmousedownOnObjs(cells,onMouseDownOnCells);
 placementOfShips.oncontextmenu = NoRight;
@@ -36,6 +43,11 @@ function addOnmousedownOnObjs(objs,func){
         item.ondragstart = function() {
             return false;
         };
+    }
+}
+function removeOnmousedownOnObjs(objs){
+    for (let item of objs){
+        item.onpointerdown = null;
     }
 }
 function onMouseDownOnCells(event){
@@ -138,7 +150,7 @@ function creatingShip(decks,x,y,direction,Matrix,arrayOfShips){
     arrayOfShips[index++] = new Ship (decks,x,y,direction,Matrix,arrayOfShips);
     addShipOnField(arrayOfShips[index-1],arrayOfShips[index-1].arrayOfShips);
     if (shipsLength == arrayOfShips.length) return
-    countOfShips(arrayOfShips[index-1].className());
+    if (Matrix == theMatrix) countOfShips(arrayOfShips[index-1].className());
 }
 function Ship(numberOfdeck,x1,y1,direction,array,arrayOfShips){
     this.arrayOfShips = arrayOfShips;
@@ -185,13 +197,13 @@ function addShipOnField(obj,ships){
     if (obj.direction){
         for (let i=0; i < obj.numberOfdeck; i++){
             obj.array[obj.x1 + i][obj.y1] = 1;
-            document.getElementById(`x-${obj.x1 + i},y-${obj.y1}`).style.backgroundColor = `red`;
+            if (obj.array == theMatrix) document.getElementById(`${whichOne} x-${obj.x1 + i},y-${obj.y1}`).style.backgroundColor = `green`;
         }
     }
     else {
         for (let i=0; i < obj.numberOfdeck; i++){
             obj.array[obj.x1][obj.y1 + i] = 1;
-            document.getElementById(`x-${obj.x1},y-${obj.y1 + i}`).style.backgroundColor = `red`;
+            if (obj.array == theMatrix) document.getElementById(`${whichOne} x-${obj.x1},y-${obj.y1 + i}`).style.backgroundColor = `green`;
         }
     }
 }
@@ -202,7 +214,7 @@ function createArea(x0,y0,x2,y2,placeHolder,array){
     for (let i=x0; i <= x2; i++){
         for (let j=y0; j <= y2; j++){
             array[i][j] = placeHolder;
-            if (placeHolder == 0) document.getElementById(`x-${i},y-${j}`).style.backgroundColor = ``;
+            if (array == theMatrix && placeHolder == 0) document.getElementById(`${whichOne} x-${i},y-${j}`).style.backgroundColor = ``;
         }
     }
 }
@@ -237,10 +249,10 @@ function creatingCell(obj){
     for (let i=0; i < 10; i++){
         for (let j=0; j < 10; j++){
             let cell = document.createElement('div');
-            cell.setAttribute(`id`,`x-${i},y-${j}`);
+            cell.setAttribute(`id`,`${whichOne} x-${i},y-${j}`);
             cell.setAttribute(`x`,i);
             cell.setAttribute(`y`,j);
-            cell.className = `cell`;
+            cell.className = `cell ${whichOne}`;
             obj.append(cell);
         }
     }
@@ -312,4 +324,60 @@ function randomPlacement(arrayOfShips,Matrix){
         let direction = true;
         creatingShip(decks,randomNumber(9),randomNumber(9),direction,Matrix,arrayOfShips);
     }
+}
+function randomPlacementOfHim(arrayOfShips,Matrix){
+    while(arrayOfShips.length != 1){
+        let decks = 4;
+        let direction = Boolean(randomNumber(1));
+        creatingShip(decks,randomNumber(9),randomNumber(9),direction,Matrix,arrayOfShips);
+    }
+    while(arrayOfShips.length != 3){
+        let decks = 3;
+        let direction = Boolean(randomNumber(1));
+        creatingShip(decks,randomNumber(9),randomNumber(9),direction,Matrix,arrayOfShips);
+    }
+    while(arrayOfShips.length != 6){
+        let decks = 2;
+        let direction = Boolean(randomNumber(1));
+        creatingShip(decks,randomNumber(9),randomNumber(9),direction,Matrix,arrayOfShips);
+    }
+    while(arrayOfShips.length != 10){
+        let decks = 1;
+        let direction = true;
+        creatingShip(decks,randomNumber(9),randomNumber(9),direction,Matrix,arrayOfShips);
+    }
+}
+function gameBegin(difficult){
+    displayNone(`choose_difficult`);
+    displayFlex(`gameplay`);
+    removeOnmousedownOnObjs(shipsObjs);
+    removeOnmousedownOnObjs(cells);
+    index = 0;
+    // whichOne = `Him`;
+    randomPlacementOfHim(shipsOfHim,theMatrixOfHim);
+    // setTimeout(hisTurn,3000);
+}
+function easy(){
+    return [randomNumber(9),randomNumber(9)]
+}
+function hisTurn(){
+let div = document.getElementById(`${whichOne} x-${x},y-${y}`);
+// PARENT EVEMENT//
+
+if (isSameShot(x,y)) return hisTurn
+if (isMiss()) {div.classList.add(`.miss`);return myTurn} 
+}
+
+function myTurn(){
+
+}
+function isMiss(x,y,ships){
+
+}
+function isSameShot(x,y){
+    if (document.getElementById(`${whichOne} x-${x},y-${y}`).classList.length > 1) return true
+    return false
+}
+function isDestroyed(){
+
 }
