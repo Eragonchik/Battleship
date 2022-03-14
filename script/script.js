@@ -4,9 +4,13 @@ let theMatrixOfHim = [];
 let field = document.querySelector(`.field`);
 let fields = document.querySelectorAll(`.field`);
 let whichOne = ``;
+let meShipsObj = {};
 creatingCell(field);
+whichOne = `Me`;
 creatingCell(fields[1]);
+whichOne = `Him`;
 creatingCell(fields[2]);
+whichOne = ``;
 creatingMatrix(theMatrix);
 creatingMatrix(theMatrixOfHim);
 let shipsObjs = document.querySelectorAll(`.ship`);
@@ -353,32 +357,79 @@ function gameBegin(difficult){
     removeOnmousedownOnObjs(shipsObjs);
     removeOnmousedownOnObjs(cells);
     index = 0;
-    // whichOne = `Him`;
+
+    whichOne = `Me`;
+    cleanField(theMatrix);
+    addShipsOnField(shipsOfMe);
+    whichOne = ``;
     randomPlacementOfHim(shipsOfHim,theMatrixOfHim);
-    // setTimeout(hisTurn,3000);
+    meShipsObj = {
+        1 : 4,
+        2 : 3,
+        3 : 2,
+        4 : 1
+    }
+    setTimeout(hisTurn,3000);
 }
 function easy(){
     return [randomNumber(9),randomNumber(9)]
 }
-function hisTurn(){
-let div = document.getElementById(`${whichOne} x-${x},y-${y}`);
-// PARENT EVEMENT//
-
-if (isSameShot(x,y)) return hisTurn
-if (isMiss()) {div.classList.add(`.miss`);return myTurn} 
+function hisTurn(x,y){
+    let coord = easy();
+    if (x == undefined && y == undefined) {x = coord[0];y = coord[1];}
+    let div = document.getElementById(`Me x-${x},y-${y}`);
+    if (isSameShot(x,y)) return hisTurn()
+    if (isMiss(x,y,shipsOfMe)) div.classList.add(`miss`)
+    // else if (isNearSomething(x,y)) return hisTurn()
+    else {div.classList.add(`demage`); marking(x,y);}
+    if (isLose()) return alert(`You lose`)
+    myTurn();
 }
 
 function myTurn(){
-    addOnmousedownOnObjs();
-
+    // addOnmousedownOnObjs();
+    // setTimeout(hisTurn,2000);
 }
 function isMiss(x,y,ships){
-
+    let obj = searchShip(x,y,ships);
+    if (obj) return false
+    else return true
 }
 function isSameShot(x,y){
-    if (document.getElementById(`${whichOne} x-${x},y-${y}`).classList.length > 1) return true
-    return false
+    if (document.getElementById(`Me x-${x},y-${y}`).classList.length > 2) return true
+    else return false
 }
 function isDestroyed(){
 
+}
+function isLose(){
+    for (let i = 0; i < theMatrix.length; i++){
+        for (let j = 0; j < theMatrix[i].length; j++){
+            if (theMatrix[i][j] == 1 && !document.getElementById(`Me x-${i},y-${j}`).classList.contains("demage")) return false
+        }
+    }
+    return true
+}
+function isWin(){
+    for (let i = 0; i < theMatrixOfHim.length; i++){
+        for (let j = 0; j < theMatrixOfHim[i].length; j++){
+            if (theMatrixOfHim[i][j] == 1 && !document.getElementById(`Him x-${i},y-${j}`).classList.contains("demage")) return false
+        }
+    }
+    return true
+}
+function marking(x,y){
+    if (document.getElementById(`Me x-${x+1},y-${y+1}`)) if(!document.getElementById(`Me x-${x+1},y-${y+1}`).classList.contains(`miss`)) document.getElementById(`Me x-${x+1},y-${y+1}`).classList.add(`marked`);
+    if (document.getElementById(`Me x-${x-1},y-${y-1}`)) if(!document.getElementById(`Me x-${x-1},y-${y-1}`).classList.contains(`miss`)) document.getElementById(`Me x-${x-1},y-${y-1}`).classList.add(`marked`);
+    if (document.getElementById(`Me x-${x+1},y-${y-1}`)) if(!document.getElementById(`Me x-${x+1},y-${y-1}`).classList.contains(`miss`)) document.getElementById(`Me x-${x+1},y-${y-1}`).classList.add(`marked`);
+    if (document.getElementById(`Me x-${x-1},y-${y+1}`)) if(!document.getElementById(`Me x-${x-1},y-${y+1}`).classList.contains(`miss`)) document.getElementById(`Me x-${x-1},y-${y+1}`).classList.add(`marked`);
+}
+function isNearSomething(x,y){
+    for (let i = -1; i < 2; i++){
+        for(let j = -1; j < 2; j++){
+            if (i == 0 && j == 0) continue
+            if (document.getElementById(`Me x-${x+i},y-${y+j}`)) if (document.getElementById(`Me x-${x+i},y-${y+j}`).classList.contains(`demage`)) return true
+        }
+    }
+    return false
 }

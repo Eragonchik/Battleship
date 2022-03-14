@@ -142,6 +142,9 @@
         display: flex;
         flex-direction: column;
     }
+    .field.OfHim{
+        margin-top: 30px;
+    }
 }
 
 .choose_difficult{
@@ -178,6 +181,9 @@
   }
 .miss{
     background: radial-gradient(15px, #000, rgba(255, 255, 255, .0));
+}
+.marked{
+    background: repeating-linear-gradient( 45deg, #0000CD 7px, #ffffff00 10px);
 }
 .gameplay{
     width: 100vw;
