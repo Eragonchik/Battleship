@@ -190,7 +190,8 @@
     height: 100vh;
     display: none;
     flex-direction: column;
-    background-image: url(../img/burning_sea.jpg);
+    /* background-image: url(../img/burning_sea.jpg); */
+
     background-repeat: round;
     position: relative;
     justify-content: center;
@@ -207,7 +208,7 @@
     transform: translateX(-50%);
     background-color: #eeeeee0f;
     border-radius: 15px;
-    color: greenyellow;
+    color: red;
     padding: 15px;
     font-size: 15px;
     white-space: nowrap;

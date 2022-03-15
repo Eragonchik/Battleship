@@ -1,10 +1,18 @@
 let theMatrix = [];
 let difficult = 0;
+let isDemaged = false;
 let theMatrixOfHim = [];
+let dSC = [];
+let demaged = false;
+let x;
+let y;
+let isReset = false;
+let tried = 0;
 let field = document.querySelector(`.field`);
 let fields = document.querySelectorAll(`.field`);
 let whichOne = ``;
 let meShipsObj = {};
+let status = document.querySelector(`.status`);
 creatingCell(field);
 whichOne = `Me`;
 creatingCell(fields[1]);
@@ -15,7 +23,9 @@ creatingMatrix(theMatrix);
 creatingMatrix(theMatrixOfHim);
 let shipsObjs = document.querySelectorAll(`.ship`);
 let cells = document.querySelectorAll(`.cell`);
+let cellsOfHim = document.querySelectorAll(`.cell.Him`);
 let placementOfShips = document.querySelector(`.placement_of_ships`);
+let gameplay = document.querySelector(`.gameplay`);
 let shipsPanel = document.querySelector(`.ships_panel`);
 let shipsOfMe = [];
 let shipsOfHim = [];
@@ -26,6 +36,7 @@ let yourMove = `Your move`;
 addOnmousedownOnObjs(shipsObjs,onMouseDownOnShips);
 addOnmousedownOnObjs(cells,onMouseDownOnCells);
 placementOfShips.oncontextmenu = NoRight;
+gameplay.oncontextmenu = NoRight;
 
 
 
@@ -126,6 +137,7 @@ function onMouseDownOnShips(event,obj = event.target,moving) {
         }
         clone.remove();
         let tagetCell = document.elementFromPoint(event.clientX, event.clientY);
+        if (!tagetCell) return
         field.append(clone);
         let tagetShips = [];
         let tagetShip = new Ship (decks,+tagetCell.getAttribute(`x`),+tagetCell.getAttribute(`y`),direction,theMatrix,tagetShips);
@@ -374,29 +386,103 @@ function gameBegin(difficult){
 function easy(){
     return [randomNumber(9),randomNumber(9)]
 }
-function hisTurn(x,y){
-    let coord = easy();
-    if (x == undefined && y == undefined) {x = coord[0];y = coord[1];}
-    let div = document.getElementById(`Me x-${x},y-${y}`);
-    if (isSameShot(x,y)) return hisTurn()
-    if (isMiss(x,y,shipsOfMe)) div.classList.add(`miss`)
-    // else if (isNearSomething(x,y)) return hisTurn()
-    else {div.classList.add(`demage`); marking(x,y);}
+function hisTurn(Xcoord,Ycoord){
+    let coordOfShot = easy();
+    if (Xcoord == undefined && Ycoord == undefined) {Xcoord = coordOfShot[0];Ycoord = coordOfShot[1];}
+    let div = document.getElementById(`Me x-${Xcoord},y-${Ycoord}`);
+    if (isSameShot(Xcoord,Ycoord,`Me`)) return hisTurn()
+    if (isMiss(Xcoord,Ycoord,shipsOfMe)) div.classList.add(`miss`)
+    else {div.classList.add(`demage`); marking(Xcoord,Ycoord); dSC[dSC.length]=[Xcoord,Ycoord];demaged=true;}
     if (isLose()) return alert(`You lose`)
+    if (demaged) {
+        if (dSC.length == 1){
+            if(!isReset){
+                if (Xcoord == dSC[0][0]-1 && Ycoord === dSC[0][1]) {
+                    meShipsObj[1]--; reset();isReset=true;}
+                }
+            if(!isReset){
+                if (Xcoord == dSC[0][0]+1 && Ycoord === dSC[0][1]) {
+                    if (canShoot(dSC[0][0]-1,dSC[0][1])) {x=dSC[0][0]-1;y=dSC[0][1];}
+                        else {meShipsObj[1]--; reset();isReset=true;}
+                }
+            }
+            if(!isReset){
+                if (Xcoord == dSC[0][0] && Ycoord === dSC[0][1]-1) {
+                    if (canShoot(dSC[0][0]+1,dSC[0][1])) {x=dSC[0][0]+1;y=dSC[0][1];}
+                    else {
+                        if (canShoot(dSC[0][0]-1,dSC[0][1])) {x=dSC[0][0]-1;y=dSC[0][1];}
+                        else {meShipsObj[1]--; reset();isReset=true;}
+                    }
+                }
+            }
+            if(!isReset){
+                if (Xcoord == dSC[0][0] && Ycoord === dSC[0][1]+1) {
+                    if (canShoot(dSC[0][0],dSC[0][1]-1)) {x=dSC[0][0];y=dSC[0][1]-1;}
+                    else {
+                        if (canShoot(dSC[0][0]+1,dSC[0][1])) {x=dSC[0][0]+1;y=dSC[0][1];}
+                        else {
+                            if (canShoot(dSC[0][0]-1,dSC[0][1])) {x=dSC[0][0]-1;y=dSC[0][1];}
+                            else {meShipsObj[1]--; reset();isReset=true;}
+                        }
+                    }
+                }
+            }
+            if(!isReset){
+                if (Xcoord == dSC[0][0] && Ycoord === dSC[0][1]) {
+                    if (canShoot(dSC[0][0],dSC[0][1]+1)) {x=dSC[0][0];y=dSC[0][1]+1;}
+                    else {
+                        if (canShoot(dSC[0][0],dSC[0][1]-1)) {x=dSC[0][0];y=dSC[0][1]-1;}
+                        else {
+                            if (canShoot(dSC[0][0]+1,dSC[0][1])) {x=dSC[0][0]+1;y=dSC[0][1];}
+                            else {
+                                if (canShoot(dSC[0][0]-1,dSC[0][1])) {x=dSC[0][0]-1;y=dSC[0][1];}
+                                else {meShipsObj[1]--; reset();isReset=true;}
+                            }
+                        }
+                    }
+                    
+                }
+            }
+        }
+    }
+    isReset = false;
     myTurn();
 }
 
 function myTurn(){
-    // addOnmousedownOnObjs();
-    // setTimeout(hisTurn,2000);
+    status.children[0].innerText = yourMove;
+    status.children[0].style.color = `greenyellow`;
+    addOnmousedownOnObjs(cellsOfHim,onMouseDownOnCellsOfHim);
+}
+function onMouseDownOnCellsOfHim(event){
+    let anotherOne = false;
+    let eventTar = event.target;
+    let coordX = +eventTar.getAttribute(`x`);
+    let coordY = +eventTar.getAttribute(`y`);
+    let div = document.getElementById(`Him x-${coordX},y-${coordY}`);
+    if (event.which == 3) {
+        if (div.classList.length >= 3 && !div.classList.contains(`marked`)) return
+        return div.classList.toggle(`marked`)
+    }
+    if (isSameShot(coordX,coordY,`Him`)) return 
+    if (isMiss(coordX,coordY,shipsOfHim)) div.classList.add(`miss`)
+    else {div.classList.add(`demage`);anotherOne=true;}
+    removeOnmousedownOnObjs(cellsOfHim,onMouseDownOnCellsOfHim);
+    if (isWin()) return alert(`You win`)
+    
+    if (anotherOne) return myTurn();
+    
+    status.children[0].innerText = opponentMove;
+    status.children[0].style.color = `red`;
+    return setTimeout(hisTurn,2000,x,y);
 }
 function isMiss(x,y,ships){
     let obj = searchShip(x,y,ships);
     if (obj) return false
     else return true
 }
-function isSameShot(x,y){
-    if (document.getElementById(`Me x-${x},y-${y}`).classList.length > 2) return true
+function isSameShot(x,y,which){
+    if (document.getElementById(`${which} x-${x},y-${y}`).classList.length > 2) return true
     else return false
 }
 function isDestroyed(){
@@ -424,12 +510,23 @@ function marking(x,y){
     if (document.getElementById(`Me x-${x+1},y-${y-1}`)) if(!document.getElementById(`Me x-${x+1},y-${y-1}`).classList.contains(`miss`)) document.getElementById(`Me x-${x+1},y-${y-1}`).classList.add(`marked`);
     if (document.getElementById(`Me x-${x-1},y-${y+1}`)) if(!document.getElementById(`Me x-${x-1},y-${y+1}`).classList.contains(`miss`)) document.getElementById(`Me x-${x-1},y-${y+1}`).classList.add(`marked`);
 }
-function isNearSomething(x,y){
-    for (let i = -1; i < 2; i++){
-        for(let j = -1; j < 2; j++){
-            if (i == 0 && j == 0) continue
-            if (document.getElementById(`Me x-${x+i},y-${y+j}`)) if (document.getElementById(`Me x-${x+i},y-${y+j}`).classList.contains(`demage`)) return true
-        }
-    }
+// function isNearSomething(x,y){
+//     for (let i = -1; i < 2; i++){
+//         for(let j = -1; j < 2; j++){
+//             if (i == 0 && j == 0) continue
+//             if (document.getElementById(`Me x-${x+i},y-${y+j}`)) if (document.getElementById(`Me x-${x+i},y-${y+j}`).classList.contains(`demage`)) return true
+//         }
+//     }
+//     return false
+// }
+function canShoot(x,y){
+    if (document.getElementById(`Me x-${x},y-${y}`)) if (document.getElementById(`Me x-${x},y-${y}`).classList.length < 3) return true
     return false
+}
+function reset(){
+    console.log(`reset`);
+    demaged = false;
+    dSC = [];
+    x = undefined;
+    y = undefined;
 }
