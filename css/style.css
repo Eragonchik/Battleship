@@ -9,11 +9,10 @@
 .wrapper_placement_of_ships{
     width: 100vw;
     height: 100vh;
-    background-image: url(../img/space.jpg);
+    background-image: url(../img/burning_sea.jpg);
+    background-repeat: round;
     display: flex;
     overflow: hidden;
-    background-size: cover;
-    background-repeat: no-repeat;
     justify-content: space-evenly;
     align-items: center;
 }
@@ -180,7 +179,7 @@
     text-align: center;
   }
 .miss{
-    background: radial-gradient(15px, #000, rgba(255, 255, 255, .0));
+    background: radial-gradient(15px, #57F, rgba(255, 255, 255, .0));
 }
 .marked{
     background: repeating-linear-gradient( 45deg, #0000CD 7px, #ffffff00 10px);
@@ -190,8 +189,7 @@
     height: 100vh;
     display: none;
     flex-direction: column;
-    /* background-image: url(../img/burning_sea.jpg); */
-
+    background-image: url(../img/space.jpg);
     background-repeat: round;
     position: relative;
     justify-content: center;

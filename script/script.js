@@ -3,6 +3,7 @@ let difficult = 0;
 let isDemaged = false;
 let theMatrixOfHim = [];
 let dSC = [];
+let dSDiraction;
 let demaged = false;
 let x;
 let y;
@@ -363,7 +364,7 @@ function randomPlacementOfHim(arrayOfShips,Matrix){
         creatingShip(decks,randomNumber(9),randomNumber(9),direction,Matrix,arrayOfShips);
     }
 }
-function gameBegin(difficult){
+function gameBegin(){
     displayNone(`choose_difficult`);
     displayFlex(`gameplay`);
     removeOnmousedownOnObjs(shipsObjs);
@@ -386,39 +387,41 @@ function gameBegin(difficult){
 function easy(){
     return [randomNumber(9),randomNumber(9)]
 }
+function hard(){
+    return easy()
+}
 function hisTurn(Xcoord,Ycoord){
-    let coordOfShot = easy();
+    let coordOfShot;
+    if (difficult == `hard`) {
+        coordOfShot = hard();
+    }
+    else coordOfShot = easy();
+    let anotherOne = false;
     if (Xcoord == undefined && Ycoord == undefined) {Xcoord = coordOfShot[0];Ycoord = coordOfShot[1];}
     let div = document.getElementById(`Me x-${Xcoord},y-${Ycoord}`);
     if (isSameShot(Xcoord,Ycoord,`Me`)) return hisTurn()
     if (isMiss(Xcoord,Ycoord,shipsOfMe)) div.classList.add(`miss`)
-    else {div.classList.add(`demage`); marking(Xcoord,Ycoord); dSC[dSC.length]=[Xcoord,Ycoord];demaged=true;}
+    else {div.classList.add(`demage`); marking(Xcoord,Ycoord); dSC[dSC.length]=[Xcoord,Ycoord];demaged=true;anotherOne=true;}
     if (isLose()) return alert(`You lose`)
-    if (demaged) {
-        if (dSC.length == 1){
-            if(!isReset){
-                if (Xcoord == dSC[0][0]-1 && Ycoord === dSC[0][1]) {
-                    meShipsObj[1]--; reset();isReset=true;}
+    if (difficult != `easy`){
+        if (demaged) {
+            if (dSC.length == 1){
+                if (meShipsObj[2] == 0 && meShipsObj[3] == 0 && meShipsObj[4] == 0) {
+                    circleMarking(dSC);
+                    reset();isReset=true;
                 }
-            if(!isReset){
-                if (Xcoord == dSC[0][0]+1 && Ycoord === dSC[0][1]) {
-                    if (canShoot(dSC[0][0]-1,dSC[0][1])) {x=dSC[0][0]-1;y=dSC[0][1];}
-                        else {meShipsObj[1]--; reset();isReset=true;}
-                }
-            }
-            if(!isReset){
-                if (Xcoord == dSC[0][0] && Ycoord === dSC[0][1]-1) {
-                    if (canShoot(dSC[0][0]+1,dSC[0][1])) {x=dSC[0][0]+1;y=dSC[0][1];}
-                    else {
+                if(!isReset){
+                    if (Xcoord == dSC[0][0]-1 && Ycoord === dSC[0][1]) {
+                        meShipsObj[1]--; reset();isReset=true;}
+                    }
+                if(!isReset){
+                    if (Xcoord == dSC[0][0]+1 && Ycoord === dSC[0][1]) {
                         if (canShoot(dSC[0][0]-1,dSC[0][1])) {x=dSC[0][0]-1;y=dSC[0][1];}
                         else {meShipsObj[1]--; reset();isReset=true;}
                     }
                 }
-            }
-            if(!isReset){
-                if (Xcoord == dSC[0][0] && Ycoord === dSC[0][1]+1) {
-                    if (canShoot(dSC[0][0],dSC[0][1]-1)) {x=dSC[0][0];y=dSC[0][1]-1;}
-                    else {
+                if(!isReset){
+                    if (Xcoord == dSC[0][0] && Ycoord === dSC[0][1]-1) {
                         if (canShoot(dSC[0][0]+1,dSC[0][1])) {x=dSC[0][0]+1;y=dSC[0][1];}
                         else {
                             if (canShoot(dSC[0][0]-1,dSC[0][1])) {x=dSC[0][0]-1;y=dSC[0][1];}
@@ -426,11 +429,8 @@ function hisTurn(Xcoord,Ycoord){
                         }
                     }
                 }
-            }
-            if(!isReset){
-                if (Xcoord == dSC[0][0] && Ycoord === dSC[0][1]) {
-                    if (canShoot(dSC[0][0],dSC[0][1]+1)) {x=dSC[0][0];y=dSC[0][1]+1;}
-                    else {
+                if(!isReset){
+                    if (Xcoord == dSC[0][0] && Ycoord === dSC[0][1]+1) {
                         if (canShoot(dSC[0][0],dSC[0][1]-1)) {x=dSC[0][0];y=dSC[0][1]-1;}
                         else {
                             if (canShoot(dSC[0][0]+1,dSC[0][1])) {x=dSC[0][0]+1;y=dSC[0][1];}
@@ -440,12 +440,151 @@ function hisTurn(Xcoord,Ycoord){
                             }
                         }
                     }
-                    
                 }
+                if(!isReset){
+                    if (Xcoord == dSC[0][0] && Ycoord === dSC[0][1]) {
+                        if (canShoot(dSC[0][0],dSC[0][1]+1)) {x=dSC[0][0];y=dSC[0][1]+1;}
+                        else {
+                            if (canShoot(dSC[0][0],dSC[0][1]-1)) {x=dSC[0][0];y=dSC[0][1]-1;}
+                            else {
+                                if (canShoot(dSC[0][0]+1,dSC[0][1])) {x=dSC[0][0]+1;y=dSC[0][1];}
+                                else {
+                                    if (canShoot(dSC[0][0]-1,dSC[0][1])) {x=dSC[0][0]-1;y=dSC[0][1];}
+                                    else {meShipsObj[1]--; reset();isReset=true;}
+                                }
+                            }
+                        }
+                        
+                    }
+                }
+            }
+            if (dSC.length == 2) {
+                if (meShipsObj[3] == 0 && meShipsObj[4] == 0) {
+                    meShipsObj[2]--;
+                    circleMarking(dSC);
+                    reset();
+                }
+                else {
+                    if(dSC.length!=0 && dSC[0][0]==dSC[1][0]){
+                        let maxY = dSC[0][1]>dSC[1][1] ? dSC[0][1] : dSC[1][1];
+                        let minY = dSC[0][1]<dSC[1][1] ? dSC[0][1] : dSC[1][1];
+                        if(!isReset){
+                            if (Xcoord == dSC[0][0] && Ycoord == minY-1) {
+                                meShipsObj[2]--; circleMarking(dSC);reset();isReset=true;}
+                            }
+                        if(!isReset){
+                            if (Xcoord == dSC[0][0] && Ycoord === maxY+1) {
+                                if (canShoot(dSC[0][0],minY-1)) {x=dSC[0][0];y=minY-1;}
+                                else {meShipsObj[2]--; circleMarking(dSC);reset();isReset=true;}
+                            }
+                        }
+                        if(!isReset){
+                            if (Xcoord == dSC[0][0] && Ycoord === dSC[dSC.length-1][1]) {
+                                if (canShoot(dSC[0][0],maxY+1)) {x=dSC[0][0];y=maxY+1;}
+                                else {
+                                    if (canShoot(dSC[0][0],minY-1)) {x=dSC[0][0];y=minY-1;}
+                                    else {meShipsObj[2]--; circleMarking(dSC);reset();isReset=true;}
+                                }
+                            }
+                        }
+                    }
+                    if(dSC.length!=0 && dSC[0][1]==dSC[1][1]){
+                        let maxX = dSC[0][0]>dSC[1][0] ? dSC[0][0] : dSC[1][0];
+                        let minX = dSC[0][0]<dSC[1][0] ? dSC[0][0] : dSC[1][0];
+                        if(!isReset){
+                            if (Xcoord == minX-1 && Ycoord == dSC[0][1]) {
+                                meShipsObj[2]--; circleMarking(dSC);reset();isReset=true;}
+                            }
+                        if(!isReset){
+                            if (Xcoord == maxX+1 && Ycoord === dSC[0][1]) {
+                                if (canShoot(minX-1,dSC[0][1])) {x=minX-1;y=dSC[0][1];}
+                                else {meShipsObj[2]--; circleMarking(dSC);reset();isReset=true;}
+                            }
+                        }
+                        if(!isReset){
+                            if (Xcoord == dSC[dSC.length-1][0] && Ycoord === dSC[0][1]) {
+                                if (canShoot(maxX+1,dSC[0][1])) {x=maxX+1;y=dSC[0][1];}
+                                else {
+                                    if (canShoot(minX-1,dSC[0][1])) {x=minX-1;y=dSC[0][1];}
+                                    else {meShipsObj[2]--; circleMarking(dSC);reset();isReset=true;}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (dSC.length == 3) {
+                if (meShipsObj[4] == 0) {
+                    meShipsObj[3]--;
+                    circleMarking(dSC);
+                    reset();
+                }
+                else {
+                    if(dSC.length!=0 && dSC[0][0]==dSC[1][0]){
+                        let maxY = dSC[0][1];
+                        let minY = dSC[0][1];
+                        for (let i = 0; i<dSC.length; i++){
+                            if (minY > dSC[i][1]) minY = dSC[i][1]
+                            if (maxY < dSC[i][1]) maxY = dSC[i][1]
+                        }
+                        if(!isReset){
+                            if (Xcoord == dSC[0][0] && Ycoord == minY-1) {
+                                meShipsObj[3]--; circleMarking(dSC);reset();isReset=true;}
+                            }
+                        if(!isReset){
+                            if (Xcoord == dSC[0][0] && Ycoord === maxY+1) {
+                                if (canShoot(dSC[0][0],minY-1)) {x=dSC[0][0];y=minY-1;}
+                                else {meShipsObj[3]--; circleMarking(dSC);reset();isReset=true;}
+                            }
+                        }
+                        if(!isReset){
+                            if (Xcoord == dSC[0][0] && Ycoord === dSC[dSC.length-1][1]) {
+                                if (canShoot(dSC[0][0],maxY+1)) {x=dSC[0][0];y=maxY+1;}
+                                else {
+                                    if (canShoot(dSC[0][0],minY-1)) {x=dSC[0][0];y=minY-1;}
+                                    else {meShipsObj[3]--; circleMarking(dSC);reset();isReset=true;}
+                                }
+                            }
+                        }
+                    }
+                    if(dSC.length!=0 && dSC[0][1]==dSC[1][1]){
+                        let maxX = dSC[0][0];
+                        let minX = dSC[0][0];
+                        for (let i = 0; i<dSC.length; i++){
+                            if (minX > dSC[i][0]) minX = dSC[i][0]
+                            if (maxX < dSC[i][0]) maxX = dSC[i][0]
+                        }
+                        if(!isReset){
+                            if (Xcoord == minX-1 && Ycoord == dSC[0][1]) {
+                                meShipsObj[3]--; circleMarking(dSC);reset();isReset=true;}
+                            }
+                        if(!isReset){
+                            if (Xcoord == maxX+1 && Ycoord === dSC[0][1]) {
+                                if (canShoot(minX-1,dSC[0][1])) {x=minX-1;y=dSC[0][1];}
+                                else {meShipsObj[3]--; circleMarking(dSC);reset();isReset=true;}
+                            }
+                        }
+                        if(!isReset){
+                            if (Xcoord == dSC[dSC.length-1][0] && Ycoord === dSC[0][1]) {
+                                if (canShoot(maxX+1,dSC[0][1])) {x=maxX+1;y=dSC[0][1];}
+                                else {
+                                    if (canShoot(minX-1,dSC[0][1])) {x=minX-1;y=dSC[0][1];}
+                                    else {meShipsObj[3]--; circleMarking(dSC);reset();isReset=true;}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (dSC.length == 4) {
+                meShipsObj[4]--;;
+                circleMarking(dSC);
+                reset();
             }
         }
     }
     isReset = false;
+    if (anotherOne) return setTimeout(hisTurn,2000,x,y);
     myTurn();
 }
 
@@ -504,27 +643,55 @@ function isWin(){
     }
     return true
 }
+function circleMarking(array){
+    if (array.length == 1 ){
+        for (let i = -1; i<2; i++){
+            for (let j = -1; j<2; j++){
+                if (i == 0 && j == 0) continue
+                if (document.getElementById(`Me x-${array[0][0]+i},y-${array[0][1]+j}`)) if(!document.getElementById(`Me x-${array[0][0]+i},y-${array[0][1]+j}`).classList.contains(`miss`)) document.getElementById(`Me x-${array[0][0]+i},y-${array[0][1]+j}`).classList.add(`marked`);
+            }
+        }
+    }
+    else {
+        if (array[0][0] == array[1][0]){
+            let minY = array[0][1];
+            for (let i = 0; i<array.length; i++){
+                if (minY > array[i][1]) minY = array[i][1]
+            }
+
+            for (let i = -1; i<2; i++){
+                for (let j = -1; j<=array.length; j++){
+                    let divtar = document.getElementById(`Me x-${array[0][0]+i},y-${minY+j}`);
+                    if (divtar) if(divtar.classList.length < 3) divtar.classList.add(`marked`); 
+                }
+            }
+        }
+        else {
+            let minX = array[0][0];
+            for (let i = 0; i<array.length; i++){
+                if (minX > array[i][0]) minX = array[i][0]
+            }
+
+            for (let i = -1; i<=array.length; i++){
+                for (let j = -1; j<2; j++){
+                    let divtar = document.getElementById(`Me x-${minX+i},y-${array[0][1]+j}`)
+                    if (divtar) if(divtar.classList.length < 3) divtar.classList.add(`marked`); 
+                }
+            }
+        }
+    }
+}
 function marking(x,y){
     if (document.getElementById(`Me x-${x+1},y-${y+1}`)) if(!document.getElementById(`Me x-${x+1},y-${y+1}`).classList.contains(`miss`)) document.getElementById(`Me x-${x+1},y-${y+1}`).classList.add(`marked`);
     if (document.getElementById(`Me x-${x-1},y-${y-1}`)) if(!document.getElementById(`Me x-${x-1},y-${y-1}`).classList.contains(`miss`)) document.getElementById(`Me x-${x-1},y-${y-1}`).classList.add(`marked`);
     if (document.getElementById(`Me x-${x+1},y-${y-1}`)) if(!document.getElementById(`Me x-${x+1},y-${y-1}`).classList.contains(`miss`)) document.getElementById(`Me x-${x+1},y-${y-1}`).classList.add(`marked`);
     if (document.getElementById(`Me x-${x-1},y-${y+1}`)) if(!document.getElementById(`Me x-${x-1},y-${y+1}`).classList.contains(`miss`)) document.getElementById(`Me x-${x-1},y-${y+1}`).classList.add(`marked`);
 }
-// function isNearSomething(x,y){
-//     for (let i = -1; i < 2; i++){
-//         for(let j = -1; j < 2; j++){
-//             if (i == 0 && j == 0) continue
-//             if (document.getElementById(`Me x-${x+i},y-${y+j}`)) if (document.getElementById(`Me x-${x+i},y-${y+j}`).classList.contains(`demage`)) return true
-//         }
-//     }
-//     return false
-// }
 function canShoot(x,y){
     if (document.getElementById(`Me x-${x},y-${y}`)) if (document.getElementById(`Me x-${x},y-${y}`).classList.length < 3) return true
     return false
 }
 function reset(){
-    console.log(`reset`);
     demaged = false;
     dSC = [];
     x = undefined;
