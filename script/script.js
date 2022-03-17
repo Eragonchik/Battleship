@@ -3,12 +3,10 @@ let difficult = 0;
 let isDemaged = false;
 let theMatrixOfHim = [];
 let dSC = [];
-let dSDiraction;
 let demaged = false;
 let x;
 let y;
 let isReset = false;
-let tried = 0;
 let field = document.querySelector(`.field`);
 let fields = document.querySelectorAll(`.field`);
 let whichOne = ``;
@@ -38,18 +36,6 @@ addOnmousedownOnObjs(shipsObjs,onMouseDownOnShips);
 addOnmousedownOnObjs(cells,onMouseDownOnCells);
 placementOfShips.oncontextmenu = NoRight;
 gameplay.oncontextmenu = NoRight;
-
-
-
-
-
-
-
-
-
-
-
-
 function NoRight(){
 	return false;
 }
@@ -388,6 +374,10 @@ function easy(){
     return [randomNumber(9),randomNumber(9)]
 }
 function hard(){
+
+
+
+    
     return easy()
 }
 function hisTurn(Xcoord,Ycoord){
@@ -402,7 +392,7 @@ function hisTurn(Xcoord,Ycoord){
     if (isSameShot(Xcoord,Ycoord,`Me`)) return hisTurn()
     if (isMiss(Xcoord,Ycoord,shipsOfMe)) div.classList.add(`miss`)
     else {div.classList.add(`demage`); marking(Xcoord,Ycoord); dSC[dSC.length]=[Xcoord,Ycoord];demaged=true;anotherOne=true;}
-    if (isLose()) return alert(`You lose`)
+    if (isLose()) return lose();
     if (difficult != `easy`){
         if (demaged) {
             if (dSC.length == 1){
@@ -607,7 +597,7 @@ function onMouseDownOnCellsOfHim(event){
     if (isMiss(coordX,coordY,shipsOfHim)) div.classList.add(`miss`)
     else {div.classList.add(`demage`);anotherOne=true;}
     removeOnmousedownOnObjs(cellsOfHim,onMouseDownOnCellsOfHim);
-    if (isWin()) return alert(`You win`)
+    if (isWin()) return win()
     
     if (anotherOne) return myTurn();
     
@@ -624,8 +614,11 @@ function isSameShot(x,y,which){
     if (document.getElementById(`${which} x-${x},y-${y}`).classList.length > 2) return true
     else return false
 }
-function isDestroyed(){
-
+function win(){
+    displayFlex(`you_win`);
+}
+function lose(){
+    displayFlex(`you_lose`);
 }
 function isLose(){
     for (let i = 0; i < theMatrix.length; i++){

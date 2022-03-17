@@ -9,9 +9,6 @@
 </head>
 <body>
     <div class="wrapper">
-        <div class="load">
-
-        </div>
         <div class="placement_of_ships">
             <div class="wrapper_placement_of_ships">
                 <div class="field">
@@ -58,6 +55,24 @@
             <div class="fields">
                 <div class="field ofMe"></div>
                 <div class="field OfHim"></div>
+            </div>
+        </div>
+        <div class="you_lose">
+            <div class="container">
+                <h2>You lose</h2>
+                <a class="lose_win" href="javascript:displayNone(`you_lose`);displayFlex(`again`);">Ok</a>
+            </div>
+        </div>
+        <div class="you_win">
+            <div class="container">
+                <h2>You win</h2>
+                <a class="lose_win" href="javascript:displayNone(`you_win`);displayFlex(`again`);">Ok</a>
+            </div>
+        </div>
+        <div class="again">
+            <div class="container">
+                <h2>Play again?</h2>
+                <a class="lose_win" href="javascript:location.reload();">Ok</a>
             </div>
         </div>
     </div>
