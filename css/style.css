@@ -132,20 +132,6 @@
 .movingRight{
     border: solid greenyellow 3px;
 }
-
-@media screen and (max-width: 550px) {
-    .wrapper_placement_of_ships{
-        flex-direction: column;
-    }
-    .fields{
-        display: flex;
-        flex-direction: column;
-    }
-    .field.OfHim{
-        margin-top: 30px;
-    }
-}
-
 .choose_difficult{
     width: 100vw;
     height: 100vh;
@@ -277,4 +263,30 @@
     justify-content: center;
     background-color: #000000d4;
     display: none;
+}
+@media screen and (max-width: 550px) {
+    .wrapper_placement_of_ships{
+        flex-direction: column;
+    }
+    .fields{
+        display: flex;
+        flex-direction: column;
+    }
+    .field.OfHim{
+        margin-top: 30px;
+    }
+    .status{
+        top: 0;
+    }
+}
+@media screen and (orientation: landscape) { 
+    .status{
+        top: 0;
+    }
+
+}
+@media screen and (min-width: 700px) {
+    .status{
+        top: 11%;
+    }
 }
