@@ -32,6 +32,7 @@ let index = 0;
 let arrOfNumbers = document.querySelectorAll(`h3`);
 let opponentMove = `Opponent's move`;
 let yourMove = `Your move`;
+let start_points = [[ [6,0], [2,0], [0,2], [0,6] ],[ [3,0], [7,0], [9,2], [9,6] ]];
 addOnmousedownOnObjs(shipsObjs,onMouseDownOnShips);
 addOnmousedownOnObjs(cells,onMouseDownOnCells);
 placementOfShips.oncontextmenu = NoRight;
@@ -373,21 +374,37 @@ function gameBegin(){
 function easy(){
     return [randomNumber(9),randomNumber(9)]
 }
-function hard(){
-
-
-
-    
-    return easy()
+function hard(x,y){
+    x = 0;
+    y = 0;
+    if (start_points[0][3][1] != 10) {
+        for (let i=0; i<start_points[0].length; i++){
+            if (start_points[0][i][0] > 9 || start_points[0][i][1] > 9) continue
+            x = start_points[0][i][0]++;
+            y = start_points[0][i][1]++;
+            return [x,y]
+        }
+    }
+    else if (start_points[1][3][1] != 10){
+        for (let i=0; i<start_points[1].length; i++){
+            if (start_points[1][i][0] < 0 || start_points[1][i][0] > 9 || start_points[1][i][1] > 9) continue
+            x = start_points[1][i][0]--;
+            y = start_points[1][i][1]++;
+            return [x,y]
+        }
+    }
+    else return easy();
 }
 function hisTurn(Xcoord,Ycoord){
     let coordOfShot;
-    if (difficult == `hard`) {
-        coordOfShot = hard();
-    }
-    else coordOfShot = easy();
     let anotherOne = false;
-    if (Xcoord == undefined && Ycoord == undefined) {Xcoord = coordOfShot[0];Ycoord = coordOfShot[1];}
+    if (Xcoord == undefined && Ycoord == undefined) {
+        if (difficult == `hard`) {
+            coordOfShot = hard();
+        }
+        else coordOfShot = easy();
+        Xcoord = coordOfShot[0];Ycoord = coordOfShot[1];
+    }
     let div = document.getElementById(`Me x-${Xcoord},y-${Ycoord}`);
     if (isSameShot(Xcoord,Ycoord,`Me`)) return hisTurn()
     if (isMiss(Xcoord,Ycoord,shipsOfMe)) div.classList.add(`miss`)
