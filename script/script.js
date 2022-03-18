@@ -11,7 +11,6 @@ let field = document.querySelector(`.field`);
 let fields = document.querySelectorAll(`.field`);
 let whichOne = ``;
 let meShipsObj = {};
-let status = document.querySelector(`.status`);
 creatingCell(field);
 whichOne = `Me`;
 creatingCell(fields[1]);
@@ -30,9 +29,11 @@ let shipsOfMe = [];
 let shipsOfHim = [];
 let index = 0;
 let arrOfNumbers = document.querySelectorAll(`h3`);
-let opponentMove = `Opponent's move`;
-let yourMove = `Your move`;
-let start_points = [[ [6,0], [2,0], [0,2], [0,6] ],[ [3,0], [7,0], [9,2], [9,6] ]];
+let btn = document.querySelector(`#Continue`);
+let isDisabled = true;
+let start_points = [[ [6,0], [2,0], [0,2], [0,6] ],[ [3,0], [7,0], [9,2], [9,6] ]]; 
+let lastMove = [];
+if (!isEveryShipIsPlaced()) btn.style.backgroundColor = `grey`;
 addOnmousedownOnObjs(shipsObjs,onMouseDownOnShips);
 addOnmousedownOnObjs(cells,onMouseDownOnCells);
 placementOfShips.oncontextmenu = NoRight;
@@ -66,6 +67,7 @@ function onMouseDownOnCells(event){
     index--;
     cleanField(theMatrix);
     addShipsOnField(shipsOfMe);
+    buttonContinueFunc();
 }
 function deleteShipFromTheArray(ship,array){
     let arrChanged = [];
@@ -155,6 +157,7 @@ function creatingShip(decks,x,y,direction,Matrix,arrayOfShips){
     addShipOnField(arrayOfShips[index-1],arrayOfShips[index-1].arrayOfShips);
     if (shipsLength == arrayOfShips.length) return
     if (Matrix == theMatrix) countOfShips(arrayOfShips[index-1].className());
+    buttonContinueFunc();
 }
 function Ship(numberOfdeck,x1,y1,direction,array,arrayOfShips){
     this.arrayOfShips = arrayOfShips;
@@ -183,6 +186,21 @@ function Ship(numberOfdeck,x1,y1,direction,array,arrayOfShips){
         else if (this.numberOfdeck == 2)return `two_deck`
         else return `one_deck`
     }
+}
+function buttonContinueFunc(){
+    isDisabled = false;
+    for (let i=0; i<arrOfNumbers.length; i++){
+        if (arrOfNumbers[i].innerText != 0) isDisabled = true;
+    }
+    if (isDisabled) {
+        btn.style.backgroundColor = `grey`;
+        btn.setAttribute('disabled',true);
+    }
+    else {
+        btn.style.backgroundColor = `blue`;
+        btn.removeAttribute('disabled');
+    }
+    isDisabled = true;
 }
 function countingNumberOfDecks(className){
     if (className == `four_deck`) return 4
@@ -278,8 +296,7 @@ function isEveryShipIsPlaced(){
     return true
 }
 function buttonContinue(){
-    if (isEveryShipIsPlaced()) {displayNone(`placement_of_ships`);displayFlex(`choose_difficult`);return}
-    else alert(`Position all ships`)
+    if (isEveryShipIsPlaced()) {displayNone(`placement_of_ships`);displayFlex(`choose_difficult`);}
 }
 function displayNone(obj){
     document.querySelector(`.${obj}`).style.display = `none`;
@@ -591,13 +608,13 @@ function hisTurn(Xcoord,Ycoord){
         }
     }
     isReset = false;
-    if (anotherOne) return setTimeout(hisTurn,2000,x,y);
+    if (lastMove[0] || lastMove[1]) {document.getElementById(`Me x-${lastMove[0]},y-${lastMove[1]}`).classList.remove(`last_move`);;}
+    div.classList.add(`last_move`);
+    lastMove = [Xcoord,Ycoord];
+    if (anotherOne) return setTimeout(hisTurn,500,x,y);
     myTurn();
 }
-
 function myTurn(){
-    status.children[0].innerText = yourMove;
-    status.children[0].style.color = `greenyellow`;
     addOnmousedownOnObjs(cellsOfHim,onMouseDownOnCellsOfHim);
 }
 function onMouseDownOnCellsOfHim(event){
@@ -615,12 +632,8 @@ function onMouseDownOnCellsOfHim(event){
     else {div.classList.add(`demage`);anotherOne=true;}
     removeOnmousedownOnObjs(cellsOfHim,onMouseDownOnCellsOfHim);
     if (isWin()) return win()
-    
     if (anotherOne) return myTurn();
-    
-    status.children[0].innerText = opponentMove;
-    status.children[0].style.color = `red`;
-    return setTimeout(hisTurn,2000,x,y);
+    return setTimeout(hisTurn,500,x,y);
 }
 function isMiss(x,y,ships){
     let obj = searchShip(x,y,ships);
